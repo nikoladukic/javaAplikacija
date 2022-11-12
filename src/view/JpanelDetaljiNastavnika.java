@@ -138,7 +138,9 @@ public class JpanelDetaljiNastavnika extends javax.swing.JPanel {
         Zvanje zvanje=nastavnik.getZvanje();
         ValidirajPodatke validacija=new ValidirajPodatke();
         validacija.ValidirajPodatke(name, Lastname);
-        
+        DatabseConnection connection=new DatabseConnection();
+        connection.Connect();
+        connection.updateNastavnici(nastavnik);
             
         
     }//GEN-LAST:event_btnSacuvajActionPerformed

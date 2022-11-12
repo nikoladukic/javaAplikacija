@@ -13,8 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import model.Nastavnik;
 import model.Zvanje;
+import view.Start;
 /**
  *
  * @author PC
@@ -179,6 +181,35 @@ public class DatabseConnection {
         
         
         
+    }
+
+    public void updateNastavnici(Nastavnik nastavnik) {
+        try {
+            String query="update nastavnik set ime=?, prezime=?,zvanje_id=? where id=?";
+            PreparedStatement statment=connection.prepareStatement(query);
+            statment.setString(1, nastavnik.getName());
+            statment.setString(2, nastavnik.getLastname());
+            statment.setInt(3, nastavnik.getZvanje().getId());
+            statment.setInt(4, nastavnik.getId());
+            int res=statment.executeUpdate();
+            if(res>0)Commit();
+            System.out.println("Uspesan update");
+            statment.close();
+                    JOptionPane.showMessageDialog(new Start(), "Nastavnik uspesno izmenjen");
+
+        } catch (SQLException ex) {
+            Rollback();
+            System.out.println("Neuspesan update");
+            JOptionPane.showMessageDialog(new Start(), "Nastavnik ne mode da se izmenni");
+
+            ex.printStackTrace();
+            
+            
+        }
+        finally{
+            Disconnect();
+        }
+
     }
     
 }
