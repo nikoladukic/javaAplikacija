@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import model.Nastavnik;
 import model.Zvanje;
+import validacija.ValidirajPodatke;
 
 /**
  *
@@ -105,10 +106,16 @@ public class frmDodajNastavnika extends javax.swing.JPanel {
     private void btnDodajNastavnikaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajNastavnikaActionPerformed
         String firstname=txtName.getText();
         String lastanme=txtLastName.getText();
-        boolean validno=ValidirajPodatke(firstname,lastanme);
+        ValidirajPodatke validirajKlasa=new ValidirajPodatke();
+        boolean validno=validirajKlasa.ValidirajPodatke(firstname,lastanme);
         if(validno==false){
             return;
+            
         }
+         if(jcbZvanja.getSelectedItem()==null){
+                 JOptionPane.showMessageDialog(new Start(), "Morate selktovati zvanje");
+                return;
+             }
         System.out.println("isptavni podaci");
         
         DatabseConnection connection=new DatabseConnection();
@@ -153,36 +160,7 @@ public class frmDodajNastavnika extends javax.swing.JPanel {
         jcbZvanja.setSelectedIndex(-1);
     }
 
-    private boolean ValidirajPodatke(String firstname, String lastanme) {
-            for (int i = 0; i < firstname.length(); i++) {
-            if(!(Character.isAlphabetic(firstname.charAt(i)))||firstname.length()==0){
-                JOptionPane.showMessageDialog(this, "Lose uneto ime");
-                return false;
-            }
-            }
-            for (int i = 0; i < lastanme.length(); i++) {
-            if(!(Character.isAlphabetic(lastanme.charAt(i)))||lastanme.length()==0){
-                JOptionPane.showMessageDialog(this, "Lose uneto prezime");
-                return false;
-            }
-            }
-            
-            if(!Character.isUpperCase(firstname.charAt(0))){
-                JOptionPane.showMessageDialog(this, "Ime mora poceti velikim slovom");
-                return false;
-            }
-             if(!Character.isUpperCase(lastanme.charAt(0))){
-                JOptionPane.showMessageDialog(this, "Prezime mora poceti velikim slovom");
-            return false;
-             } 
-             if(jcbZvanja.getSelectedItem()==null){
-                 JOptionPane.showMessageDialog(this, "Morate selktovati zvanje");
-
-             }
-             
-             return true;
-        
-    }
+    
 
 
 }

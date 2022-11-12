@@ -164,10 +164,13 @@ public class DatabseConnection {
             }
             statement.close();
             Commit();
+            System.out.println("commit uspesan! Nastavnik izbrisan!");
         } catch (SQLException ex) {
             System.out.println("Grska prilkom brisanja");    
             ex.printStackTrace();
             Rollback();
+            System.out.println("Uspesan roolback");    
+
         }
         finally{
             Disconnect();
