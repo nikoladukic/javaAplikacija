@@ -7,7 +7,12 @@ package view;
 import databaseRepository.DatabseConnection;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.table.TableColumn;
 import model.Nastavnik;
+import model.Zvanje;
 import view.modelTable.TableModel;
 import view.modelTable.TableModelZaSinhronizacija;
 
@@ -16,7 +21,7 @@ import view.modelTable.TableModelZaSinhronizacija;
  * @author PC
  */
 public class NewViewNastavnik extends javax.swing.JPanel {
-
+ private List<Nastavnik> nastvnici;
     /**
      * Creates new form NewViewNastavnik
      */
@@ -54,6 +59,11 @@ public class NewViewNastavnik extends javax.swing.JPanel {
         jScrollPane1.setViewportView(newTableNastavnik);
 
         jButton1.setText("Dodaj red");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Obrisi red");
 
@@ -92,6 +102,22 @@ public class NewViewNastavnik extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        TableModelZaSinhronizacija model=(TableModelZaSinhronizacija)newTableNastavnik.getModel();
+        model.flag=true;
+        model.addNastacnik(new Nastavnik());
+        model.flag=false;
+        databaseRepository.DatabseConnection connection=new DatabseConnection();
+        connection.Connect();
+        List<Zvanje> zvanja=new ArrayList<>();
+        zvanja=connection.GetAllZvanja();
+        
+        JComboBox comboBox=new JComboBox(zvanja.toArray());
+        TableColumn kolona=newTableNastavnik.getColumnModel().getColumn(2);
+        kolona.setCellEditor(new DefaultCellEditor(comboBox));
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -104,7 +130,7 @@ public class NewViewNastavnik extends javax.swing.JPanel {
     private void prepareWindow() {
         databaseRepository.DatabseConnection connection=new DatabseConnection();
         connection.Connect();
-        List<Nastavnik> nastvnici=new ArrayList<>();
+        nastvnici=new ArrayList<>();
         nastvnici=connection.getAllNastavnik();
         TableModelZaSinhronizacija model=new TableModelZaSinhronizacija(nastvnici);
         newTableNastavnik.setModel(model);

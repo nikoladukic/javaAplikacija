@@ -15,6 +15,9 @@ import model.Zvanje;
  * @author PC
  */
 public class TableModelZaSinhronizacija extends  AbstractTableModel{
+    public boolean  flag=false;
+    public TableModelZaSinhronizacija() {
+    }
 
     List<Nastavnik> nastavnici;
     String []columns=new String[]{"Ime","Prezime","Zvanje"};
@@ -35,8 +38,9 @@ public class TableModelZaSinhronizacija extends  AbstractTableModel{
         switch (columnIndex) {
             case 0: return nastavnik.getName();
             case 1: return nastavnik.getLastname();
-            case 2: return nastavnik.getZvanje().getNaziv();
-                
+            case 2:if(nastavnik.getZvanje()!=null){
+                     return nastavnik.getZvanje().getNaziv();
+            }else return null;
             default:
                 return "n/a";
         }    
@@ -61,6 +65,17 @@ public class TableModelZaSinhronizacija extends  AbstractTableModel{
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
+       
+        if(nastavnici.get(rowIndex)==null||nastavnici.get(rowIndex).getName()==""||nastavnici.get(rowIndex).getName()==null){
+            return true;
+        }
+         if(nastavnici.get(rowIndex)==null||nastavnici.get(rowIndex).getLastname()==""||nastavnici.get(rowIndex).getLastname()==null){
+            return true;
+        }
+         if(nastavnici.get(rowIndex)==null||nastavnici.get(rowIndex).getZvanje()==null){
+            return true;
+        }
+         
         for (int i = 0; i < getRowCount(); i++) {
             for (int j = 0; j < getColumnCount(); j++) {
                 if(i==rowIndex && j==columnIndex && j==2){
@@ -71,10 +86,14 @@ public class TableModelZaSinhronizacija extends  AbstractTableModel{
             }
         int i=0;
         for (Nastavnik nastavnik : nastavnici) {
-            if(nastavnik.getZvanje().getId()!=5 && rowIndex==i){
+            if(nastavnik.getZvanje()!=null){
+             if(nastavnik.getZvanje().getId()!=5 && rowIndex==i){
                 return false;
+                }
             }
             i++;
+            
+            
         }
         
         

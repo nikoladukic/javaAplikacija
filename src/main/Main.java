@@ -14,6 +14,6 @@ public class Main {
      public static void main(String[] args) {
          Start jframStart=new Start();
          jframStart.setVisible(true);
-         jframStart.setExtendedState(jframStart.MAXIMIZED_BOTH);
+//         jframStart.setExtendedState(jframStart.MAXIMIZED_BOTH);
     }
 }
