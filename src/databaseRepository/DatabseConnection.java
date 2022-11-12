@@ -193,7 +193,7 @@ public class DatabseConnection {
             if(res>0)Commit();
             System.out.println("Uspesan update");
             statment.close();
-                    JOptionPane.showMessageDialog(new Start(), "Nastavnik uspesno izmenjen");
+            JOptionPane.showMessageDialog(new Start(), "Nastavnik uspesno izmenjen");
 
         } catch (SQLException ex) {
             Rollback();

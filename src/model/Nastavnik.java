@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.Objects;
+
 /**
  *
  * @author PC
@@ -59,6 +61,29 @@ public class Nastavnik {
     @Override
     public String toString() {
         return "Nastavnik{" + "name=" + name + ", lastname=" + lastname + ", zvanje=" + zvanje + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        final Nastavnik other = (Nastavnik) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.lastname, other.lastname)) {
+            return false;
+        }
+        if(this.zvanje.id==other.zvanje.id){
+            return true;
+        }else return false;
     }
 
    
