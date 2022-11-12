@@ -66,6 +66,11 @@ public class NewViewNastavnik extends javax.swing.JPanel {
         });
 
         jButton2.setText("Obrisi red");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Sinhronizuj tabelu");
 
@@ -117,6 +122,15 @@ public class NewViewNastavnik extends javax.swing.JPanel {
         kolona.setCellEditor(new DefaultCellEditor(comboBox));
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+        TableModelZaSinhronizacija model=(TableModelZaSinhronizacija)newTableNastavnik.getModel();
+        int index=newTableNastavnik.getSelectedRow();
+        model.removeNastavnik(index);
+        
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
