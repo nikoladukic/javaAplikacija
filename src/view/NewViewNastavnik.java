@@ -5,8 +5,11 @@
 package view;
 
 import databaseRepository.DatabseConnection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -21,7 +24,9 @@ import view.modelTable.TableModelZaSinhronizacija;
  * @author PC
  */
 public class NewViewNastavnik extends javax.swing.JPanel {
- private List<Nastavnik> nastvnici;
+
+    private List<Nastavnik> nastvnici;
+
     /**
      * Creates new form NewViewNastavnik
      */
@@ -73,6 +78,11 @@ public class NewViewNastavnik extends javax.swing.JPanel {
         });
 
         jButton3.setText("Sinhronizuj tabelu");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -108,29 +118,42 @@ public class NewViewNastavnik extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        TableModelZaSinhronizacija model=(TableModelZaSinhronizacija)newTableNastavnik.getModel();
-        model.flag=true;
+        TableModelZaSinhronizacija model = (TableModelZaSinhronizacija) newTableNastavnik.getModel();
+        model.flag = true;
         model.addNastacnik(new Nastavnik());
-        model.flag=false;
-        databaseRepository.DatabseConnection connection=new DatabseConnection();
+        model.flag = false;
+        databaseRepository.DatabseConnection connection = new DatabseConnection();
         connection.Connect();
-        List<Zvanje> zvanja=new ArrayList<>();
-        zvanja=connection.GetAllZvanja();
-        
-        JComboBox comboBox=new JComboBox(zvanja.toArray());
-        TableColumn kolona=newTableNastavnik.getColumnModel().getColumn(2);
+        List<Zvanje> zvanja = new ArrayList<>();
+        zvanja = connection.GetAllZvanja();
+
+        JComboBox comboBox = new JComboBox(zvanja.toArray());
+        TableColumn kolona = newTableNastavnik.getColumnModel().getColumn(2);
         kolona.setCellEditor(new DefaultCellEditor(comboBox));
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-        TableModelZaSinhronizacija model=(TableModelZaSinhronizacija)newTableNastavnik.getModel();
-        int index=newTableNastavnik.getSelectedRow();
+
+        TableModelZaSinhronizacija model = (TableModelZaSinhronizacija) newTableNastavnik.getModel();
+        int index = newTableNastavnik.getSelectedRow();
         model.removeNastavnik(index);
-        
-        
+
+
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        List<Nastavnik> nastavniciKojiNePostojeUbazi = new ArrayList<>();
+        List<Nastavnik> nastavniciIzBaze = new ArrayList<>();
+        DatabseConnection connection = new DatabseConnection();
+        connection.Connect();
+        nastavniciIzBaze = connection.getAllNastavnik();
+        TableModelZaSinhronizacija model = (TableModelZaSinhronizacija) newTableNastavnik.getModel();
+        nastvnici = model.getAllNastavnici();
+
+        formirajRazlikuLista( nastvnici,nastavniciIzBaze, connection);
+
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -142,18 +165,49 @@ public class NewViewNastavnik extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void prepareWindow() {
-        databaseRepository.DatabseConnection connection=new DatabseConnection();
+        databaseRepository.DatabseConnection connection = new DatabseConnection();
         connection.Connect();
-        nastvnici=new ArrayList<>();
-        nastvnici=connection.getAllNastavnik();
-        TableModelZaSinhronizacija model=new TableModelZaSinhronizacija(nastvnici);
+        nastvnici = new ArrayList<>();
+        nastvnici = connection.getAllNastavnik();
+        TableModelZaSinhronizacija model = new TableModelZaSinhronizacija(nastvnici);
         newTableNastavnik.setModel(model);
-        
+
         omoguciIzmenu(nastvnici);
     }
 
     private void omoguciIzmenu(List<Nastavnik> nastavnici) {
-       //menjam ime i prezime ako je redovni profeosr
-       
+        //menjam ime i prezime ako je redovni profeosr
+
     }
+
+    private void formirajRazlikuLista(List<Nastavnik> lista1, List<Nastavnik> lista2, DatabseConnection connection) {
+        List<Nastavnik> razlika = new ArrayList<>();
+        boolean flag = false;
+        for (Nastavnik nastavnik : lista1) {
+            flag = false;
+            for (Nastavnik nastavnik2 : lista2) {
+                if (nastavnik.getId() == nastavnik2.getId()) {
+                    flag = true;
+                    if (nastavnik.equals(nastavnik2)) {
+                        break;
+                    } else {
+                        System.out.println(nastavnik);
+                        connection.updateNastavnici(nastavnik);
+                        connection.Connect();
+                        break;
+                    }
+                }
+            }
+            if (flag == false) {
+                try {
+                    connection.addNastavnik(nastavnik);
+                    connection.Connect();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+
+    }
+
 }
