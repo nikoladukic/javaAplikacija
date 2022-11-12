@@ -88,5 +88,9 @@ public class TableModel extends AbstractTableModel {
         nastavnici.remove(index);
         fireTableRowsDeleted(index, index);
     }
+
+    public TableModel(List<Nastavnik> nastavnici) {
+        this.nastavnici = nastavnici;
+    }
     
 }

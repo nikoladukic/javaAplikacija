@@ -128,6 +128,28 @@ public class DatabseConnection {
         }
         return zvanja;
     }
-    
+    public List<Nastavnik> getAllNastavnik(){
+                    List<Nastavnik> nastavnici=new ArrayList<>();
+
+        try {
+            String query="Select * from nastavnik as n inner join zvanje as z on n.zvanje_id=z.id order by n.ime";
+            Statement statement=connection.createStatement();
+            ResultSet resultSet=statement.executeQuery(query);
+            while (resultSet.next()) {                
+                nastavnici.add(new Nastavnik(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3),
+                new Zvanje(resultSet.getInt("zvanje_id"), resultSet.getString("naziv"))));
+                
+            }
+            System.out.println("Nastavnci ucitani preko joinovane tabele");
+            return nastavnici;
+            
+        } catch (SQLException ex) {
+            System.out.println("Greska prilikom konekcije!");
+            ex.printStackTrace();
+        }
+        
+        return nastavnici;
+        
+    }
     
 }
