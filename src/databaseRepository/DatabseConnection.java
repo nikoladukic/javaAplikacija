@@ -132,7 +132,7 @@ public class DatabseConnection {
                     List<Nastavnik> nastavnici=new ArrayList<>();
 
         try {
-            String query="Select * from nastavnik as n inner join zvanje as z on n.zvanje_id=z.id order by n.ime";
+            String query="Select * from nastavnik as n inner join zvanje as z on n.zvanje_id=z.id order by z.naziv";
             Statement statement=connection.createStatement();
             ResultSet resultSet=statement.executeQuery(query);
             while (resultSet.next()) {                
