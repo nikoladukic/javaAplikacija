@@ -153,7 +153,6 @@ public class DatabseConnection {
         return nastavnici;
         
     }
-
     public void izbrisiNastavnika(Nastavnik nastavnik) {
 
         try {
@@ -182,7 +181,6 @@ public class DatabseConnection {
         
         
     }
-
     public void updateNastavnici(Nastavnik nastavnik) {
         try {
             String query="update nastavnik set ime=?, prezime=?,zvanje_id=? where id=?";
@@ -211,5 +209,4 @@ public class DatabseConnection {
         }
 
     }
-    
 }
