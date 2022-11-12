@@ -4,8 +4,10 @@
  */
 package view;
 
+import databaseRepository.DatabseConnection;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import model.Nastavnik;
 import view.modelTable.TableModel;
 
@@ -34,6 +36,7 @@ public class JpanelDetaljiNastavnika extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jtableNastavnik = new javax.swing.JTable();
+        btnObrisi = new javax.swing.JButton();
 
         jtableNastavnik.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -48,6 +51,13 @@ public class JpanelDetaljiNastavnika extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(jtableNastavnik);
 
+        btnObrisi.setText("Obrisi");
+        btnObrisi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnObrisiActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -56,14 +66,40 @@ public class JpanelDetaljiNastavnika extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnObrisi)
+                .addGap(19, 19, 19))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 66, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addComponent(btnObrisi)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiActionPerformed
+        
+        TableModel model=(TableModel)jtableNastavnik.getModel();
+        Nastavnik nastavnik=(Nastavnik) model.getAllNastavnici().get(0);
+        int result=JOptionPane.showConfirmDialog(this, "Da li ste sigurni da zelite da onrisete nastavnika");
+        DatabseConnection connection=new DatabseConnection();
+        List<Nastavnik> nastavnici1=new ArrayList<>();
+        if(result==JOptionPane.YES_OPTION){
+            connection.Connect();
+            connection.izbrisiNastavnika(nastavnik);
+            TableModel model1=new TableModel(nastavnici1);
+            jtableNastavnik.setModel(model1);
+        }else {
+            return;
+        }
+        
+        
+        
+    }//GEN-LAST:event_btnObrisiActionPerformed
 
     private void PrepareWindow(Nastavnik nastavnik) {
         List<Nastavnik> nastavnici=new ArrayList<>();
@@ -77,6 +113,7 @@ public class JpanelDetaljiNastavnika extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnObrisi;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jtableNastavnik;
     // End of variables declaration//GEN-END:variables

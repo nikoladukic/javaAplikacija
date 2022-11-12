@@ -151,5 +151,31 @@ public class DatabseConnection {
         return nastavnici;
         
     }
+
+    public void izbrisiNastavnika(Nastavnik nastavnik) {
+
+        try {
+            String query="Delete  from Nastavnik where id=?";
+            PreparedStatement statement=connection.prepareStatement(query);
+            statement.setInt(1, nastavnik.getId());
+            int result=statement.executeUpdate();
+            if(result==1){
+                System.out.println("Moze se reci da je sve spremo za brisanje, ceka se commit...");
+            }
+            statement.close();
+            Commit();
+        } catch (SQLException ex) {
+            System.out.println("Grska prilkom brisanja");    
+            ex.printStackTrace();
+            Rollback();
+        }
+        finally{
+            Disconnect();
+        }
+                
+        
+        
+        
+    }
     
 }
