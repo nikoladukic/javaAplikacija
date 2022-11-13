@@ -150,9 +150,9 @@ public class NewViewNastavnik extends javax.swing.JPanel {
         nastavniciIzBaze = connection.getAllNastavnik();
         TableModelZaSinhronizacija model = (TableModelZaSinhronizacija) newTableNastavnik.getModel();
         nastvnici = model.getAllNastavnici();
-
+        
         formirajRazlikuLista( nastvnici,nastavniciIzBaze, connection);
-
+        akoNemaUTabliIzbrisiU_bazi(nastavniciIzBaze, nastvnici, connection);
     }//GEN-LAST:event_jButton3ActionPerformed
 
 
@@ -172,13 +172,9 @@ public class NewViewNastavnik extends javax.swing.JPanel {
         TableModelZaSinhronizacija model = new TableModelZaSinhronizacija(nastvnici);
         newTableNastavnik.setModel(model);
 
-        omoguciIzmenu(nastvnici);
     }
 
-    private void omoguciIzmenu(List<Nastavnik> nastavnici) {
-        //menjam ime i prezime ako je redovni profeosr
-
-    }
+   
 
     private void formirajRazlikuLista(List<Nastavnik> lista1, List<Nastavnik> lista2, DatabseConnection connection) {
         List<Nastavnik> razlika = new ArrayList<>();
@@ -209,5 +205,23 @@ public class NewViewNastavnik extends javax.swing.JPanel {
         }
 
     }
-
+    private void akoNemaUTabliIzbrisiU_bazi(List<Nastavnik> lista1, List<Nastavnik> lista2, DatabseConnection connection){
+        boolean flag=false;
+        for (Nastavnik nastavnik : lista1) {// ova ide kroz bazu , i ako taj element ne postoji u listi brise ga
+            flag=false;
+            for (Nastavnik nastavnik1 : lista2) { //ova ide kroz tableu
+                if(nastavnik.getId()==nastavnik1.getId()){
+                    flag=true;
+                    break;
+                }
+            }
+                if(flag==false){
+                     connection.izbrisiNastavnika(nastavnik);
+                     connection.Connect();
+                }
+        }
+        
+        
+        
+    }
 }
